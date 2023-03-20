@@ -131,6 +131,37 @@ public:
 		quiz.close();
 	}
 
+	// => Start a Quiz
+	void start() {
+		// => Showing available quizs
+		ifstream Quizs;
+		Quizs.open("Quizs.txt", ios::in);
+
+		int indx = 0;
+		string quiz_name;
+		vector<string>quizs;
+		vector<int>options;
+		while (getline(Quizs, quiz_name)) {
+			cout << "[" << indx + 1 << "] " << quiz_name << endl;
+			indx++;
+			options.push_back(indx);
+			quizs.push_back(quiz_name + ".txt");
+			quiz_name.clear();
+		}
+		Quizs.close();
+
+		// => Choosing one of the avaliable quizs
+		string choice = choose();
+		for (int o : options) {
+			if (stoi(choice) == o) {
+				ifstream quiz;
+				quiz.open(quizs[o - 1], ios::in);
+
+				quiz.close();
+			}
+		}
+	}
+
 	// => Get Quizs 
 	vector<string> getQuizs() {
 		return quizs;
