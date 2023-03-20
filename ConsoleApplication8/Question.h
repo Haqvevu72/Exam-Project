@@ -5,6 +5,7 @@ private:
 	string question;
 	vector<string>answers;
 	string corrAnswer;
+	bool saved = false;
 public:
 	// => Default constructor
 	Question() {
@@ -18,8 +19,13 @@ public:
 		this->corrAnswer = corrAnswer;
 	}
 
+	// => setters
+	void setSaved(bool saved){
+		this->saved = saved;
+	}
 	// => getters
 	string getQuestion() { return question; }
 	vector<string>getAnswers() { return answers; }
 	string getCorrect() { return corrAnswer; }
+	bool getSaved() { return saved; }
 };

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 using namespace std;
 string choose(){
 	string choice; cout << "your choice: "; getline(cin, choice);
