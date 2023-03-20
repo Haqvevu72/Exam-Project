@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <Windows.h>
 using namespace std;
 string choose(){
 	string choice; cout << "your choice: "; getline(cin, choice);

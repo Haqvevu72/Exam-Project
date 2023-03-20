@@ -11,8 +11,32 @@ public:
 
 	// => Create a question
 	void create(){
-		// => Getting Quiz Name
-		string quizName; cout << "Quiz name: "; getline(cin, quizName);
+		// => Getting Quiz Name and Checking existance before accept 
+		string quizName; 
+		while (true) {
+			system("cls");
+			bool exist = false;
+			cout << "Quiz name: "; getline(cin, quizName);
+
+			ifstream existQuiz;
+			existQuiz.open("Quizs.txt", ios::in);
+			while (!existQuiz.eof()){
+				string exist_quiz;
+				getline(existQuiz, exist_quiz);
+				if (exist_quiz == quizName) {
+					exist = true; break;
+				}
+			}
+			existQuiz.close();
+
+			if (exist) {
+				cout << "Quiz name already exists ! Try other names !" << endl;
+				Sleep(1200);
+			}
+			else {
+				break;
+			}
+		}
 
 		for (int i = 0; i < questions.size(); i++){
 			// Asking me to enter question
@@ -52,9 +76,6 @@ public:
 						Question q(tempQuestion, tempAnswers, tempCorrect);
 						questions[i] = q;
 						questions[i].setSaved(true);
-						if (i == 4) {
-							i = -1;
-						}
 						break;
 					}
 					else if (choice == "2") {
@@ -67,18 +88,37 @@ public:
 						break;
 					}
 					else if (choice == "1") {
-						if (i == 4) {
-							i = -1;
-						}
-
 						break;
 					}
 				}
 			}
-			if (i == 4){
-				i = -1;
+
+			// => Checking if all questions saved
+			if (i == 4) {
+				bool saved = true;
+				for (Question q : questions) {
+					if (q.getSaved() == false)
+						saved = false;
+				}
+				if (saved) {
+					break;
+				}
+				else {
+					i=-1;
+				}
 			}
 		}
+
+		// => Adding File To The `quizs` vector . Then add it to `Quizs.txt`
+		quizs.push_back(quizName);
+		ofstream Quizs;
+		Quizs.open("Quizs.txt", ios::app);
+		for (string s:quizs) {
+			Quizs << s << endl;
+		}
+		Quizs.close();
+
+		// => Wrriting items to txt file
 		ofstream quiz;
 		quiz.open(quizName + ".txt", ios::out);
 		for (int j = 0; j < questions.size(); j++) {
@@ -91,4 +131,8 @@ public:
 		quiz.close();
 	}
 
+	// => Get Quizs 
+	vector<string> getQuizs() {
+		return quizs;
+	}
 };
