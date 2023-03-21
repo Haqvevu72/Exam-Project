@@ -156,8 +156,11 @@ public:
 		}
 		return new_vec;
 	}
+
 	// => Start a Quiz
 	void start() {
+		// => Enter Name;
+		string name; cout << "Nick-Name: "; getline(cin, name);
 		// Correct Answer and Incorrect Answer count
 		short correct = 0; short incorrect = 0;
 
@@ -314,5 +317,7 @@ public:
 		system("cls");
 		cout << "Correct: " << correct << endl;
 		cout << "Incorrect: " << incorrect << endl;
+
+		
 	}
 };
