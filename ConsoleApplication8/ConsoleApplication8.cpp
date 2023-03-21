@@ -11,6 +11,8 @@ string choose(){
 #include "Question.h"
 #include "Quiz.h"
 void main(){
+	srand(time(NULL));
+
 	// We create 5 questions 
 	Question q1; Question q2; Question q3; Question q4; Question q5;
 	
@@ -20,5 +22,5 @@ void main(){
 	// Then we created quiz
 	Quiz quiz(questions);
 
-	quiz.create();
+
 }

@@ -1,18 +1,17 @@
 #pragma once
-class Quiz{
+class Quiz {
 private:
 	vector<Question>questions;
 	vector<string>quizs;
 public:
 	// => 1 parametrized constructor
-	Quiz(vector<Question>questions){
+	Quiz(vector<Question>questions) {
 		this->questions = questions;
 	}
-
 	// => Create a question
-	void create(){
+	void create() {
 		// => Getting Quiz Name and Checking existance before accept 
-		string quizName; 
+		string quizName;
 		while (true) {
 			system("cls");
 			bool exist = false;
@@ -20,7 +19,7 @@ public:
 
 			ifstream existQuiz;
 			existQuiz.open("Quizs.txt", ios::in);
-			while (!existQuiz.eof()){
+			while (!existQuiz.eof()) {
 				string exist_quiz;
 				getline(existQuiz, exist_quiz);
 				if (exist_quiz == quizName) {
@@ -38,7 +37,7 @@ public:
 			}
 		}
 
-		for (int i = 0; i < questions.size(); i++){
+		for (int i = 0; i < questions.size(); i++) {
 			// Asking me to enter question
 			system("CLS");
 			if (questions[i].getSaved() == false) {
@@ -62,10 +61,10 @@ public:
 				while (true) {
 					system("cls");
 					cout << i + 1 << ".Question: " << tempQuestion << endl;
-				    cout << "Answer 1:"<<a1<<endl;
-				    cout << "Answer 2:"<<a2<<endl; 
-				    cout << "Answer 3:"<<a3<<endl;
-				    cout << "Answer 4:"<<a4<<endl;
+					cout << "Answer 1:" << a1 << endl;
+					cout << "Answer 2:" << a2 << endl;
+					cout << "Answer 3:" << a3 << endl;
+					cout << "Answer 4:" << a4 << endl;
 					cout << "Correct answer: " << tempCorrect << endl;
 
 					cout << "[1] new" << endl;
@@ -104,7 +103,7 @@ public:
 					break;
 				}
 				else {
-					i=-1;
+					i = -1;
 				}
 			}
 		}
@@ -113,7 +112,7 @@ public:
 		quizs.push_back(quizName);
 		ofstream Quizs;
 		Quizs.open("Quizs.txt", ios::app);
-		for (string s:quizs) {
+		for (string s : quizs) {
 			Quizs << s << endl;
 		}
 		Quizs.close();
@@ -123,16 +122,45 @@ public:
 		quiz.open(quizName + ".txt", ios::out);
 		for (int j = 0; j < questions.size(); j++) {
 			quiz << questions[j].getQuestion() << endl;
-			for (string q:questions[j].getAnswers()) {
+			for (string q : questions[j].getAnswers()) {
 				quiz << q << endl;
 			}
 			quiz << questions[j].getCorrect() << endl;
 		}
 		quiz.close();
+		questions.clear();
 	}
+	// => Randomly allocating questions
+	vector<Question>rand_sort(vector<Question>questions)
+	{
+		vector<Question>new_vec;
+		vector<int>idxs{ -1 };
+		int counter = 0;
+		int max = 4; int min = 0;
+		while (counter < 5)
+		{
+			bool flag = false;
+			int idx = min + rand() % (max - min + 1);
+			for (int i : idxs)
+			{
+				if (i == idx)
+					flag = true;
 
+			}
+			if (!flag)
+			{
+				new_vec.push_back(questions[idx]);
+				idxs.push_back(idx);
+				counter++;
+			}
+		}
+		return new_vec;
+	}
 	// => Start a Quiz
 	void start() {
+		// Correct Answer and Incorrect Answer count
+		short correct = 0; short incorrect = 0;
+
 		// => Showing available quizs
 		ifstream Quizs;
 		Quizs.open("Quizs.txt", ios::in);
@@ -154,16 +182,137 @@ public:
 		string choice = choose();
 		for (int o : options) {
 			if (stoi(choice) == o) {
-				ifstream quiz;
-				quiz.open(quizs[o - 1], ios::in);
-
-				quiz.close();
+				quiz_name = quizs[o - 1];
+				break;
 			}
 		}
-	}
 
-	// => Get Quizs 
-	vector<string> getQuizs() {
-		return quizs;
+		// => Getting quiz questions from the file and writing on objects
+		ifstream quiz;
+		quiz.open(quiz_name, ios::in);
+		for (int i = 0; i < questions.size(); i++) {
+			string question;
+			string a1; string a2; string a3; string a4;
+			vector<string>answers;
+			string cor_ans;
+
+			getline(quiz, question);
+			getline(quiz, a1);
+			getline(quiz, a2);
+			getline(quiz, a3);
+			getline(quiz, a4);
+			answers.push_back(a1); answers.push_back(a2); answers.push_back(a3); answers.push_back(a4);
+			getline(quiz, cor_ans);
+
+			Question temp(question, answers, cor_ans);
+			questions[i] = temp;
+		}
+		quiz.close();
+
+		// => Sorinting Answers Randomly
+		for (int i = 0; i < questions.size(); i++) {
+			questions[i].setAnswers(questions[i].rand_sort(questions[i].getAnswers()));
+		}
+
+		// => Sorting Randomly Questions
+		questions = rand_sort(questions);
+
+		// => Starting Quiz
+		for (int i = 0; i < questions.size(); i++) {
+			if (questions[i].getSaved() == false) {
+				system("cls");
+				cout << i + 1 << "." << questions[i].getQuestion() << endl;
+				cout << "A) " << questions[i].getAnswers()[0] << endl;
+				cout << "B) " << questions[i].getAnswers()[1] << endl;
+				cout << "C) " << questions[i].getAnswers()[2] << endl;
+				cout << "D) " << questions[i].getAnswers()[3] << endl;
+				string answer; cout << "Answer: "; getline(cin, answer);
+
+				// [1] new
+				// [2] back
+				// [3] submit
+				while (true) {
+					system("cls");
+					cout << i + 1 << "." << questions[i].getQuestion() << endl;
+					cout << "A) " << questions[i].getAnswers()[0] << endl;
+					cout << "B) " << questions[i].getAnswers()[1] << endl;
+					cout << "C) " << questions[i].getAnswers()[2] << endl;
+					cout << "D) " << questions[i].getAnswers()[3] << endl;
+
+					cout << "[1] new" << endl;
+					cout << "[2] back" << endl;
+					cout << "[3] submit" << endl;
+					string choice = choose();
+
+					if (choice == "3") {
+						if (answer == "A" && questions[i].getAnswers()[0] == questions[i].getCorrect()) {
+							cout << "True !" << endl;
+							questions[i].setSaved(true);
+							Sleep(1000);
+							correct += 1;
+							break;
+						}
+						else if (answer == "B" && questions[i].getAnswers()[1] == questions[i].getCorrect()) {
+							cout << "True !" << endl;
+							questions[i].setSaved(true);
+							Sleep(1000);
+							correct += 1;
+							break;
+						}
+						else if (answer == "C" && questions[i].getAnswers()[2] == questions[i].getCorrect()) {
+							cout << "True !" << endl;
+							questions[i].setSaved(true);
+							Sleep(1000);
+							correct += 1;
+							break;
+						}
+						else if (answer == "D" && questions[i].getAnswers()[3] == questions[i].getCorrect()) {
+							cout << "True !" << endl;
+							questions[i].setSaved(true);
+							Sleep(1000);
+							correct += 1;
+							break;
+						}
+						else {
+							cout << "False !" << endl;
+							questions[i].setSaved(true);
+							Sleep(1000);
+							incorrect += 1;
+							break;
+						}
+					}
+					else if (choice == "2") {
+						if (i == 0) {
+							i -= 1;
+						}
+						else {
+							i -= 2;
+						}
+						break;
+					}
+					else if (choice == "1") {
+						break;
+					}
+				}
+				 
+			}
+			if (i == 4) {
+				bool saved = true;
+				for (Question q : questions) {
+					if (q.getSaved() == false)
+						saved = false;
+				}
+				if (saved) {
+					break;
+				}
+				else {
+					i = -1;
+				}
+			}
+
+		}
+		system("cls");
+		cout << "Correct: " << correct << endl;
+		cout << "Incorrect: " << incorrect << endl;
 	}
 };
