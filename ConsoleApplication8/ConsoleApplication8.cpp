@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <string>
 #include <fstream>
@@ -34,10 +35,5 @@ void main(){
 	
 	// Then we created quiz
 	Quiz quiz(questions);
-
-	// Wiritng results to leader board
-	for (auto it = leaderBoard.begin(); it != leaderBoard.end(); it++) {
-		cout << it->first << ": " << it->second << endl;
-	}
-
+	//quiz.start();
 }
