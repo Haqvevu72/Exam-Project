@@ -160,7 +160,14 @@ public:
 	// => Start a Quiz
 	void start() {
 		// => Enter Name;
-		string name; cout << "Nick-Name: "; getline(cin, name);
+		string name;
+		if (option == 1 || option == 2) {
+			name = "Admin";
+		}
+		else if (option == 3) {
+			system("CLS");
+			cout << "Nick Name: "; getline(cin, name);
+		}
 		// Correct Answer and Incorrect Answer count
 		short correct = 0; short incorrect = 0;
 
@@ -172,6 +179,7 @@ public:
 		string quiz_name;
 		vector<string>quizs;
 		vector<int>options;
+		system("CLS");
 		while (getline(Quizs, quiz_name)) {
 			cout << "[" << indx + 1 << "] " << quiz_name << endl;
 			indx++;
@@ -303,7 +311,7 @@ public:
 						break;
 					}
 				}
-				 
+
 			}
 			if (i == 4) {
 				bool saved = true;
@@ -323,70 +331,43 @@ public:
 		system("cls");
 		cout << "Correct: " << correct << endl;
 		cout << "Incorrect: " << incorrect << endl;
-		
+
 		// => Stroing result in LeaderBoard
-		if (leaderBoard.size()<10) {
 			// => Adding new player to leader board
-			for (auto it = leaderBoard.begin(); it != leaderBoard.end(); it++) {
-				if (it->first == name) {
-					if (it->second = correct) {
-						leaderBoard[name] = correct;
-					}
-				}
-				else {
+		for (auto it = leaderBoard.begin(); it != leaderBoard.end(); it++) {
+			if (it->first == name) {
+				if (it->second != correct) {
 					leaderBoard[name] = correct;
 				}
 			}
-
-			 // Create a vector of pairs from the map
-			vector<pair<string, int>> vec(leaderBoard.begin(), leaderBoard.end());
-			
-
-			// Sort the vector of pairs by value
-			sort(vec.begin(), vec.end(), [](const pair<string, int>& a, const pair<string, int>& b) {
-				return a.second > b.second;
-				});
-
-			// Print the sorted vector of pairs
-			ofstream LeaderBoard;
-			LeaderBoard.open("LeaderBoard.txt", ios::out);
-			for (const auto& pair : vec) {
-				LeaderBoard << pair.first << endl;
-				LeaderBoard << pair.second << endl;
-			}
-			LeaderBoard.close();
-		}
-
-		else if (leaderBoard.size()==10) {
-			bool flag = false;
-			string toRemove;
-			for (auto it = leaderBoard.begin(); it != leaderBoard.end(); it++) {
-				if (correct > it->second) {
-					toRemove = it->first;
-					flag = true;
-					break;
-				}
-			}
-			if (flag) {
-				leaderBoard.erase(toRemove);
+			else {
 				leaderBoard[name] = correct;
-				// Create a vector of pairs from the map
-				vector<pair<string, int>> vec_1(leaderBoard.begin(), leaderBoard.end());
-
-				// Sort the vector of pairs by value
-				sort(vec_1.begin(), vec_1.end(), [](const pair<string, int>& a, const pair<string, int>& b) {
-					return a.second > b.second;
-					});
-
-				// Print the sorted vector of pairs
-				ofstream LeaderBoard;
-				LeaderBoard.open("LeaderBoard.txt", ios::out);
-				for (const auto& pair : vec_1) {
-					LeaderBoard << pair.first << endl;
-					LeaderBoard << pair.second << endl;
-				}
-				LeaderBoard.close();
 			}
 		}
+
+		// Create a vector of pairs from the map
+		vector<pair<string, int>> vec(leaderBoard.begin(), leaderBoard.end());
+
+
+		// Sort the vector of pairs by value
+		sort(vec.begin(), vec.end(), [](const pair<string, int>& a, const pair<string, int>& b) {
+			return a.second > b.second;
+			});
+
+		// Print the sorted vector of pairs
+		ofstream LeaderBoard;
+		int counter = 0;
+		LeaderBoard.open("LeaderBoard.txt", ios::out);
+		for (const auto& pair : vec) {
+			LeaderBoard << pair.first << endl;
+			LeaderBoard << pair.second << endl;
+			counter++;
+			if (counter == 10) {
+				break;
+			}
+			
+		}
+		LeaderBoard.close();
+
 	}
 };

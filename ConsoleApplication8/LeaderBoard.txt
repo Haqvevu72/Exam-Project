@@ -1,4 +1,12 @@
+Aynur
+5
 Elchin
+5
+Mahidevran
+5
+Natasha
+5
+Neynar
 5
 Perivz
 5
@@ -6,7 +14,7 @@ Nurlan
 4
 Samir
 4
+Camal
+3
 Elgun
 2
-
-
