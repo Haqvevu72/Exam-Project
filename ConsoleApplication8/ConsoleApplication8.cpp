@@ -54,34 +54,45 @@ int option = options();
 #include "Question.h"
 #include "Quiz.h"
 void quiz() {
-	srand(time(NULL));
+	while (true) {
+		srand(time(NULL));
 
-	// Filling leaderBoard with information which coming from LeaderBoard.txt
-	ifstream Read_leaderBoard;
-	Read_leaderBoard.open("LeaderBoard.txt", ios::in);
-	string name; string point;
-	while (!Read_leaderBoard.eof()) {
-		getline(Read_leaderBoard, name);
-		getline(Read_leaderBoard, point);
-		leaderBoard[name] = atoi(point.c_str());
-		name.clear(); point.clear();
-	}
-	Read_leaderBoard.close();
+		// Filling leaderBoard with information which coming from LeaderBoard.txt
+		ifstream Read_leaderBoard;
+		Read_leaderBoard.open("LeaderBoard.txt", ios::in);
+		string name; string point;
+		while (!Read_leaderBoard.eof()) {
+			getline(Read_leaderBoard, name);
+			getline(Read_leaderBoard, point);
+			leaderBoard[name] = atoi(point.c_str());
+			name.clear(); point.clear();
+		}
+		Read_leaderBoard.close();
 
-	// We create 5 questions 
-	Question q1; Question q2; Question q3; Question q4; Question q5;
+		// We create 5 questions 
+		Question q1; Question q2; Question q3; Question q4; Question q5;
 
-	// And store them inside the vector called `questions`
-	vector <Question> questions{ q1, q2, q3, q4, q5 };
+		// And store them inside the vector called `questions`
+		vector <Question> questions{ q1, q2, q3, q4, q5 };
 
-	// Then we created quiz
-	Quiz q(questions);
+		// Then we created quiz
+		Quiz q(questions);
 
-	if (option==1) {
-		q.create();
-	}
-	else if (option == 2 || option==3) {
-		q.start();
+		if (option == 1) {
+			q.create();
+		}
+		else if (option == 2 || option == 3) {
+			q.start();
+		}
+		cout << "[1] Continue" << endl;
+		cout << "[2] Quit" << endl;
+		string choice = choose();
+		if (choice == "2") {
+			break;
+		}
+		else if (choice=="1") {
+			option = options();
+		}
 	}
 }
 void main(){
