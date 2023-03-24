@@ -255,7 +255,7 @@ public:
 					cout << "B) " << questions[i].getAnswers()[1] << endl;
 					cout << "C) " << questions[i].getAnswers()[2] << endl;
 					cout << "D) " << questions[i].getAnswers()[3] << endl;
-
+					cout << "Answer: " << answer << endl;
 					cout << "[1] new" << endl;
 					cout << "[2] back" << endl;
 					cout << "[3] submit" << endl;
