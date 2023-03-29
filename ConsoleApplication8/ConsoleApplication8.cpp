@@ -6,8 +6,8 @@
 #include <Windows.h>
 #include <map>
 using namespace std;
-map<string,int>leaderBoard;
-string choose(){
+map<string, int>leaderBoard;
+string choose() {
 	string choice; cout << "your choice: "; getline(cin, choice);
 	return choice;
 }
@@ -25,28 +25,51 @@ bool admin_guest() {
 		}
 	}
 }
+#include "Admin.h"
 int options() {
+	Admin admin("Elgun", "Elgun2004@ce");
 	bool adminguest = admin_guest();
-	while (true) {
-		if (adminguest == true) {
+
+	if (adminguest == true) {
+		bool admin_entered = false;
+		while (true) {
 			system("CLS");
-			cout << "[1] Create quiz" << endl;
-			cout << "[2] Play quiz" << endl;
-			string choice = choose();
-			if (choice == "1") {
-				return 1;
+			string username; cout << "Username: "; getline(cin, username);
+			string password; cout << "Password: "; getline(cin, password);
+
+			if (admin.check(username, password)) {
+				cout << "Access Successful!" << endl;
+				Sleep(2000);
+				admin_entered = true;
+				break;
 			}
-			else if (choice == "2") {
-				return 2;
+			else {
+				cout << "Access Denied !" << endl;
+				Sleep(2000);
 			}
 		}
-		if (adminguest == false) {
-			system("CLS");
-			cout << "[1] Play quiz" << endl;
-			string choice = choose();
-			if (choice == "1") {
-				return 3;
+
+		while (true) {
+			if (admin_entered == true) {
+				system("CLS");
+				cout << "[1] Create quiz" << endl;
+				cout << "[2] Play quiz" << endl;
+				string choice = choose();
+				if (choice == "1") {
+					return 1;
+				}
+				else if (choice == "2") {
+					return 2;
+				}
 			}
+		}
+	}
+	else if (adminguest == false) {
+		system("CLS");
+		cout << "[1] Play quiz" << endl;
+		string choice = choose();
+		if (choice == "1") {
+			return 3;
 		}
 	}
 }
@@ -90,11 +113,11 @@ void quiz() {
 		if (choice == "2") {
 			break;
 		}
-		else if (choice=="1") {
+		else if (choice == "1") {
 			option = options();
 		}
 	}
 }
-void main(){
+void main() {
 	quiz();
 }
