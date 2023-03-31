@@ -32,7 +32,8 @@ int options() {
 
 	if (adminguest == true) {
 		bool admin_entered = false;
-		while (true) {
+		short counter = 0;
+		while (counter < 3) {
 			system("CLS");
 			string username; cout << "Username: "; getline(cin, username);
 			string password; cout << "Password: "; getline(cin, password);
@@ -45,12 +46,13 @@ int options() {
 			}
 			else {
 				cout << "Access Denied !" << endl;
+				counter++;
 				Sleep(2000);
 			}
 		}
-
-		while (true) {
-			if (admin_entered == true) {
+		
+		if (admin_entered == true) {
+			while (true) {
 				system("CLS");
 				cout << "[1] Create quiz" << endl;
 				cout << "[2] Play quiz" << endl;
@@ -63,6 +65,7 @@ int options() {
 				}
 			}
 		}
+
 	}
 	else if (adminguest == false) {
 		system("CLS");
